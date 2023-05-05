@@ -1,0 +1,143 @@
+CREATE TABLE Bill
+(Bill_num INTEGER PRIMARY KEY,
+Bill_amount DECIMAL(9, 2) NOT NULL CHECK (Bill_amount >= 0),
+Amount_insured DECIMAL(9, 2) CHECK (Amount_insured >= 0),
+Bill_status VARCHAR(6) NOT NULL CHECK (Bill_status in ('Paid', 'Unpaid'))
+);
+
+CREATE TABLE Doctor
+(Doc_ID INTEGER PRIMARY KEY,
+Dr_First VARCHAR(30) NOT NULL,
+Dr_Last VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE Insurance_Company
+(Insur_Comp_ID INTEGER PRIMARY KEY,
+Insur_Comp_Name VARCHAR(50) NOT NULL,
+Street_Address VARCHAR(50) NOT NULL,
+Zip_code INTEGER NOT NULL,
+City VARCHAR(30) NOT NULL,
+State VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE Patient
+(Pat_ID INTEGER PRIMARY KEY,
+Pat_First VARCHAR(30) NOT NULL,
+Pat_Last VARCHAR(30) NOT NULL,
+Street_Address VARCHAR(50) NOT NULL,
+Zip_code INTEGER NOT NULL,
+City VARCHAR(30) NOT NULL,
+State VARCHAR(30) NOT NULL,
+Insur_Comp_ID INTEGER references Insurance_Company(Insur_Comp_ID)
+);
+
+CREATE TABLE Appointment
+(App_ID INTEGER PRIMARY KEY,
+App_reason VARCHAR(6) CHECK (App_reason in ('Init', 'Proc', 'Follow', 'Misc.')),
+App_date date NOT NULL,
+App_time VARCHAR(30) NOT NULL,
+Doc_ID INTEGER references Doctor(Doc_ID),
+Bill_num INTEGER references Bill(Bill_num),
+Pat_ID INTEGER references Patient(Pat_ID)
+);
+
+CREATE TABLE Payment
+(Payment_ID INTEGER PRIMARY KEY,
+Amount_paid DECIMAL(9, 2) NOT NULL CHECK (Amount_paid >= 0),
+Pay_method VARCHAR(6) NOT NULL CHECK (Pay_method in ('Credit', 'Debit', 'Cash', 'Check')),
+Pay_date date NOT NULL,
+Insur_Comp_ID INTEGER references Insurance_Company(Insur_Comp_ID),
+Pat_ID INTEGER references Patient(Pat_ID),
+Bill_num INTEGER references Bill(Bill_num)
+);
+
+INSERT INTO Doctor (Doc_ID, Dr_First, Dr_Last) VALUES (001, 'Matthew', 'Carrasco');
+INSERT INTO Doctor (Doc_ID, Dr_First, Dr_Last) VALUES (002, 'Seth', 'Meola');
+INSERT INTO Doctor (Doc_ID, Dr_First, Dr_Last) VALUES (003, 'Cassidy', 'Tran');
+INSERT INTO Doctor (Doc_ID, Dr_First, Dr_Last) VALUES (004, 'Isme', 'Guerrero');
+INSERT INTO Doctor (Doc_ID, Dr_First, Dr_Last) VALUES (005, 'Jared', 'Weidner');
+
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES (1, 150, 0, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(2, 150, 50, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(3, 3000, 0, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(4, 1500, 1200, 'Paid');  
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(5, 150, 50, 'Unpaid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(6,150, 0, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(7, 3000, 2400, 'Unpaid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(8, 3000, 2700, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(9, 1200, 1080, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(10, 150, 50, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES (11, 150, 0, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(12, 3000, 2400, 'Unpaid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(13, 1200, 1080, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES(14, 1500, 1200, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES (15, 150, 150, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES (16, 3000, 3000, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES (17, 1500, 1500, 'Paid');
+INSERT INTO Bill(Bill_num, Bill_amount, Amount_insured, Bill_status) VALUES (18, 150, 150, 'Paid');
+
+  
+
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES (1, 'United Health', '123 United Dr', 23456, 'New York', 'NY');
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES(2, 'Kaiser Foundation', '5644 87th St', 49426, 'Hudsonville', 'MI');
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES(3, 'Anthem Inc', '16 Cactus St', 48185, 'Westland', 'MI');
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES(4, 'Humana', '7371 N Linden Lane', 37379, 'Soddy Daisy', 'TN');
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES(5, 'CVS', '81 Mayflower Lane', 32780, 'Titusville', 'FL');
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES(6, 'Blue Cross Blue Shield', '23 2nd Dr', 30721, 'Dalton', 'GA');
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES(7, 'Caresource', '154 Cottage St', 48236, 'Grosse Pointe', 'MI');
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES(8, 'Centene Corp', '19 Belmont Lane', 71730, 'El Dorado', 'AR');
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES(9, 'Highmark Group', '282 SW Pine Lane', 22030, 'FairFax', 'VA');
+INSERT INTO Insurance_Company(Insur_Comp_ID, Insur_Comp_Name, Street_Address, Zip_code, City, State) VALUES(10, 'Metropolitan', '62 Bay Meadows Ave', 38024, 'Dyersburg', 'TN');
+
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id) VALUES (001, 'Hailey', 'Gilles', '482 Cactus Ave', 85001, 'Peoria', 'AZ', 1);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id) VALUES(002, 'Jack', 'Leeman', '1377 Alameda', 79907, 'El Paso', 'TX', 2);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(003, 'Cammi', 'Barbosa', '995 Gover Dr', 29939, 'St. Louis', 'MO', 3);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(004, 'Nicole', 'Ojeda', '2103 Jefferson', 40218, 'Tampa Bay', 'FL', 4);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(005, 'Leslie', 'Reyes', '12004 Mackenzie Loop', 34778, 'Jackson', 'MI', 5);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(006, 'Melissa', 'Garcia', '291 University Dr', 49204, 'Roswell', 'NM', 6);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id) VALUES(007, 'Nestor', 'Jasso', '1049 Taylor Rd', 34940, 'Reno', 'NV', 7);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(008, 'Sarah', 'Aguado', '3482 Devon Shire', 20494, 'Portland', 'OR', 8);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id) VALUES(009, 'Sebastian', 'Felix', '2909 Martin Luther King', 59300, 'Greenbay', 'WI', 9);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(010, 'Summer', 'Garcia', '948 Cherry Lane', 48390, 'Stockton', 'CA', 10);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(011, 'Bill', 'Bob', '2000 E Bell Road', 48390, 'Phoenix', 'AZ', 10);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(012, 'Betty', 'Boop', '3845 E Bell Road', 48390, 'Phoenix', 'AZ', 1);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(013, 'Gandalf', 'The_Grey', '6428 E Bell Road', 85022, 'Phoenix', 'AZ', 2);
+INSERT INTO Patient(Pat_ID, Pat_First, Pat_Last, Street_Address, Zip_Code, City, State, insur_comp_id)VALUES(014, 'Bilbo', 'Baggins', '1234 E Shire Dr', 85022, 'Phoenix', 'AZ', 2);
+
+
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(1, 'Init', TO_DATE('2021-12-15', 'YYYY-MM-DD'), '3:00 P.M.', 1, 1, 1);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(2, 'Init', TO_DATE('2021-12-16', 'YYYY-MM-DD'), '12:00 P.M.', 3, 2, 2);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(3, 'Proc', TO_DATE('2021-12-23', 'YYYY-MM-DD'), '11:00 A.M.', 3, 3, 2);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(4, 'Misc.', TO_DATE('2021-12-25', 'YYYY-MM-DD'), '3:00 P.M.', 2, 4, 3);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(5, 'Follow', TO_DATE('2022-01-07', 'YYYY-MM-DD'), '11:00 A.M.', 3, 5, 2);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(6, 'Init', TO_DATE('2022-01-09', 'YYYY-MM-DD'), '9:00 A.M.', 2, 6, 4);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(7, 'Proc', TO_DATE('2022-01-10', 'YYYY-MM-DD'), '2:00 P.M.', 2, 7, 3);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(8, 'Proc', TO_DATE('2022-01-15', 'YYYY-MM-DD'), '10:00 A.M.', 2, 8, 4);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(9, 'Misc.', TO_DATE('2022-01-16', 'YYYY-MM-DD'), '1:00 P.M.', 4, 9, 5);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(10, 'Follow', TO_DATE('2022-01-23', 'YYYY-MM-DD'), '2:00 P.M.', 4, 10, 5);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(11, 'Init', TO_DATE('2021-12-15', 'YYYY-MM-DD'), '3:00 P.M.', 2, 11, 11);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(12, 'Misc.', TO_DATE('2021-12-16', 'YYYY-MM-DD'), '3:00 P.M.', 3, 12, 12);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(13, 'Misc.', TO_DATE('2022-01-16', 'YYYY-MM-DD'), '1:00 P.M.', 2, 13, 13);
+INSERT INTO Appointment(App_ID, App_reason, App_date, App_time, Doc_ID, Bill_num, Pat_ID) VALUES(14, 'Misc.', TO_DATE('2022-01-16', 'YYYY-MM-DD'), '1:00 P.M.', 2, 14, 14);
+
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES (1 ,150,'Credit',TO_DATE('2021-12-15', 'YYYY-MM-DD'), 1, 1, 1);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(2 ,100,'Debit',TO_DATE('2021-12-16','YYYY-MM-DD'), 2, 2, 2);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(3 ,3000,'Cash',TO_DATE('2021-12-23','YYYY-MM-DD'), 3, 3 , 3);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(4 ,300,'Check',TO_DATE('2021-12-25','YYYY-MM-DD'), 4, 4, 4);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(5 ,100,'Credit',TO_DATE('2022-01-07','YYYY-MM-DD'), 5, 5, 5);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(6 ,150,'Debit',TO_DATE('2022-01-09','YYYY-MM-DD'), 6, 6, 6);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(7 ,600,'Cash',TO_DATE('2022-01-10','YYYY-MM-DD'), 7, 7, 7);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(8 ,300,'Check',TO_DATE('2022-01-15','YYYY-MM-DD'), 8, 8, 8);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(9 ,120,'Cash',TO_DATE('2022-01-16','YYYY-MM-DD'), 9, 9, 9);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(10 ,100,'Check',TO_DATE('2022-01-23','YYYY-MM-DD'), 10, 10, 10);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(11 ,150,'Check',TO_DATE('2022-01-15','YYYY-MM-DD'), 10, 11, 11);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(12 ,600,'Cash',TO_DATE('2022-01-23','YYYY-MM-DD'), 1, 12, 12);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(13 ,120,'Check',TO_DATE('2022-01-16','YYYY-MM-DD'), 2, 13, 13);
+INSERT INTO Payment(Payment_ID, Amount_paid, Pay_method, Pay_date, Insur_Comp_ID,Pat_ID,Bill_num) VALUES(14 ,300,'Cash',TO_DATE('2022-01-23','YYYY-MM-DD'), 2, 14, 14);
+
+--insuranceCompaniesWithMaxPayments
+SELECT I.Insur_Comp_Name, max(b.amount_insured)as maxInsured
+FROM Payment Pay, Patient Pat, Insurance_company I, Bill B
+WHERE I.insur_comp_id = Pay.insur_comp_id and pay.bill_num = b.bill_num and pay.pat_id = pat.pat_id and pat.insur_comp_id = pay.insur_comp_id
+GROUP BY I.Insur_Comp_Name
+ORDER BY maxInsured desc;
